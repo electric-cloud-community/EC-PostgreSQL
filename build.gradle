@@ -1,0 +1,60 @@
+// -*- Groovy -*-
+// build.gradle
+//
+// Gradle build script for EC-PostgreSQL plugin.
+//
+// Copyright (c) 2017 Electric Cloud, Inc.
+// All rights reserved
+
+buildscript {
+    repositories {
+	maven {
+		url 'http://dl.bintray.com/ecpluginsdev/maven'
+	}
+
+	jcenter()
+    }
+    dependencies {
+        classpath group: 'com.electriccloud.plugins', name: 'flow-gradle-plugin', version: '+'
+		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
+}
+
+repositories {
+	maven {
+		url "https://oss.sonatype.org/content/repositories/snapshots"
+	}
+}
+
+group = "com.electriccloud"
+description = "Plugins : EC-PostgreSQL"
+version = "1.0.0"
+
+apply plugin: 'flow-gradle-plugin'
+apply plugin: 'license'
+
+license {
+    header = file ('shortHeader.txt')
+    exclude "**/project.xml"
+}
+
+licenseMain.onlyIf { rootProject.file('shortHeader.txt').exists() }
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.3'
+}
+
+// dependencies {
+//             testCompile "junit:junit:4.12"
+//             testCompile "org.hamcrest:hamcrest-library:1.3"
+//             testCompile "com.googlecode.json-simple:json-simple:1.1"
+//             testCompile "commons-logging:commons-logging:1.2"
+//             testCompile "org.apache.httpcomponents:httpcore:4.4.4"
+//             testCompile "org.apache.httpcomponents:httpclient:4.3.6"
+//             testCompile "commons-codec:commons-codec:1.10"
+// }
+
+test
+{
+  systemProperties['PLUGIN_VERSION'] = version
+}

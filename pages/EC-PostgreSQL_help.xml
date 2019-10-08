@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="generator" content="HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+    <meta content="text/html; charset=us-ascii" http-equiv="content-type" />
+
+    <title>CloudBees Flow Plugin for PostgreSQL</title>
+    <link rel="stylesheet" href="../../plugins/@PLUGIN_KEY@/pluginhelp.css" type="text/css" media="screen" />
+</head>
+
+<body>
+    <div class="help">
+    <h1 class="pluginname">PostgreSQL</h1>
+    <p>Plugin Version @PLUGIN_VERSION@</p>
+    <hr style="margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;" noshade="noshade" />
+
+	<p>Revised on Oct 08, 2019</p>
+				
+				<h1>Contents</h1>
+				
+				<ul>
+				<li><p><a href="#overview">Overview</a></p></li>
+				<li><p><a href="#setupconfig">Setting Up the Plugin Configuration</a></p></li>
+				<li><p><a href="#procedures">Plugin Procedures</a></p></li>
+				<ul>
+				<li><a href="#ExecuteSQL">ExecuteSQL</a></li>
+				</ul>
+				<li><p><a href="#example">Examples and Use Cases</a></p></li>
+				<li><p><a href="#rns">Release Notes</a></p></li>
+				</ul>
+			
+	    <p>IMPORTANT: For all parameter descriptions in this document, required parameters are shown in <span class="required">bold 
+		
+		italics</span>.</p>
+				
+		<p>IMPORTANT: In the CloudBees Flow UI, go to the Home page, open the Main Menu, and click <b>Admin</b> &gt; <b>Plugins</b> to open the 
+		
+		Plugin Manager.</p>
+	
+	<h1 id="overview">Overview</h1>    
+	
+        <p>PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance. </p>
+
+	    <p>For more information about PostgreSQL, go to <a href="https://www.postgresql.org">PostgreSQL</a>.</p>
+
+        <h2>CloudBees Flow Integration to PostgreSQL</h2>
+	
+        <p>The plugin calls the PostgreSQL psql command-line tool that you use to execute SQL files against the database.</p>
+
+        <h2>Integrated Version</h2>
+
+        <p>This plugin was developed and tested against PostgreSQL 11.</p>
+
+    <h1 id="setupconfig">Setting Up the Plugin Configuration</h1>
+
+        <p>Plugin configurations are sets of parameters that apply across some or all of the plugin procedures. 
+		    They reduce repetition of common values, create predefined sets of parameters for end users, and store 
+		    credentials securely. Each configuration has a unique name that is automatically entered in designated 
+		    parameters in the procedures.</p>
+						
+		<h2>Input</h2>
+  
+        <ol>
+		    <li>In the Main Menu, click <b>Admin</b> &gt; <b>Plugins</b> to open the Plugin Manager.</li>
+		    <li>Find the EC-PostgreSQL row.</li>
+		    <li>Click <b>Configure</b> to open the PostgreSQL Configurations page.</li> 	
+		    <li>Click <b>Create Configuration</b>.</li>
+		    <li>To create an PostgreSQL configuration, enter the following information and click <b>OK</b>. 
+			<br /> Remember that you may need to create additional configurations later.</li>
+
+        <table class="grid">
+		
+        <thead>
+		
+            <tr>
+                <th>Parameter</th>
+
+                <th>Description</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td class="required">Configuration Name</td>
+
+                <td>A unique name for the configuration. (Required)</td>
+            </tr>
+
+            <tr>
+                <td class="required">User Name</td>
+
+                <td>The user login ID. Remember that login IDs are case sensitive. (Required)</td>
+            </tr>
+
+            <tr>
+                <td class="required">Password</td>
+
+                <td>The user-specified password. (Required)</td>
+            </tr>
+			
+			<tr>
+                <td class="required">Retype Password</td>
+
+                <td>The user-specified password. (Required)</td>
+            
+			</tr>
+			
+		</tbody>
+		
+         </table>
+				
+		    </ol>
+						
+	        <h2>Output</h2>	 
+		
+		    <p>The PostgreSQL Configurations page now shows the new configuration.</p>
+		
+		    <p>You can also manage your PostgreSQL configurations in this page. Click <b>Edit</b> to modify an existing configuration or 
+		    <b>Delete</b> to remove an existing configuration.</p>
+	
+	<h1 id="procedures">Plugin Procedures</h1>
+
+    <div id="ExecuteSQL">
+        <a name="ExecuteSQL" id="ExecuteSQL"></a> 
+
+        <h3>ExecuteSQL</h3>
+
+        <p>This procedure creates and executes a SQL file against an PostgreSQL database.</p>
+		
+		            <h3>Input</h3>
+			
+            <ol>
+				<li>In the Main Menu, click <b>Admin</b> &gt; <b>Plugins</b> to open the Plugin Manager.</li>
+			    <li>Go to the ExecuteSQL procedure.</li>
+			    <li>Enter the following parameters:<br />
+						
+            <table class="grid">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="required">Configuration name</td>
+
+                    <td>The name of the configuration that contains
+                    the user and password used to connect to the
+                    database server. (Required)</td>
+                </tr>
+
+                <tr>
+                    <td>Query</td>
+
+                    <td>A query to run against the database.</td>
+                </tr>
+
+                <tr>
+                    <td class="required">psql path</td>
+
+                    <td>Absolute path to the psql command-line tool. (Required)</td>
+                </tr>
+
+                <tr>
+                    <td class="required">Server</td>
+
+                    <td>The name or IP address of the server to which you want to connect. (Required)</td>
+                </tr>
+
+                <tr>
+                    <td>Output file</td>
+
+                    <td>Name of a file where output is stored (without extension).</td>
+                </tr>
+
+                <tr>
+                    <td>SQL file path</td>
+
+                    <td>Absolute path to a SQL file that you want to run. </td>
+                </tr>
+
+                <tr>
+                    <td>Additional commands</td>
+
+                    <td>Additional commands, such as -S to activate the SQL*Plus silent mode.<br />
+                     For more commands, go to 
+                    <a href="https://www.postgresql.org/docs/">
+                    this website.</a></td>
+                </tr>
+
+                <tr>
+                    <td>Working directory</td>
+
+                    <td>The directory where the commands are executed.</td>
+                </tr>
+                
+                <tr>
+                    <td>Result (output property path)</td>
+                    
+                    <td>Property name used to store the query results.</td>
+                </tr>
+                
+            </tbody>
+        </table>
+     
+		 	    </li>
+						
+		        <br />
+	            <img src="../../plugins/@PLUGIN_KEY@/images/PostgreSQL-3.png" alt="screenshot" />
+		        <br />
+
+		        </ol>   
+						
+		        <h3>Output</h3>
+						
+		        <p>After the job runs, you can view the results on the Job Details page in CloudBees Flow. The SQL file was successfully executed.</p>
+		       		
+		        <p>In the <b>ExecuteSQL</b> step, click the Log button to see the diagnostic information.</p>
+        
+    </div>
+
+    <h1 id="example">Examples and Use Cases</h1>
+
+    <h2>How to Create a Configuration</h2>
+	<img src="../../plugins/@PLUGIN_KEY@/images/PostgreSQL-1.png" alt="screenshot" /> 
+
+    <h2>Stored configurations are available on the PostgreSQL Configurations page</h2>
+	<img src="../../plugins/@PLUGIN_KEY@/images/PostgreSQL-2.png" alt="screenshot" /> 
+
+    <h2>ExecuteSQL parameter form</h2>
+	<img src="../../plugins/@PLUGIN_KEY@/images/PostgreSQL-3.png" alt="screenshot" /> 
+
+    <h2>Expected Output</h2>
+	<img src="../../plugins/@PLUGIN_KEY@/images/PostgreSQL-4.png" alt="screenshot" />
+
+    <h1 id="rns">Release Notes</h1>
+    
+    <h2>@PLUGIN_KEY@-1.0.0</h2>
+
+        <ul>
+        <li>Initial Release.</li>
+        </ul>
+    
+    
+    </div>
+	
+</body>
+
+</html>

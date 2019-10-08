@@ -1,0 +1,275 @@
+# -*-Perl-*-
+
+# runPostgreSQLCommandLine.ntest -
+#
+# EC-PostgreSQL
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use ECTest;
+use ECSelenium;
+
+ 
+# system tests
+
+
+require "$::gTestFileDir/../../EC-PostgreSQL/systemtest/PostgreSQL-common.ntest";
+
+
+$::grunMSBuildCreated = 0;
+$::gProjectImported = 0;
+$::gtestProjectName = 'PostgreSQLTest';
+
+#stores the result wheter the result of the procedure is success or error
+my $outcome = "";
+my $delimiter = ($^O eq 'linux') ? "'":"\"";
+
+
+sub importProject() {
+    assertOK($::N->import(
+                     { file =>"$::gTestFileDir/PostgreSQL.xml",
+               path  => "/projects/PostgreSQLTest",
+               force => 1
+             } ), "import PostgreSQLTest");
+   
+
+    assertOK($::N->getProcedure($::gtestProjectName, "ExecuteSQLFromFile"),"ExecuteSQLFromFile procedure doesn't exists");
+    assertOK($::N->getProcedure($::gtestProjectName, "ExecuteSQLFromTextArea"),"ExecuteSQLFromTextArea procedure doesn't exists");
+    assertOK($::N->getProcedure($::gtestProjectName, "ExecuteSQLWithAdditionalCommands"),"ExecuteSQLWithAdditionalCommands procedure doesn't exists");
+    assertOK($::N->getProcedure($::gtestProjectName, "ExecuteSQLWithLogFile"),"ExecuteSQLWithLogFile procedure doesn't exists");
+
+    $::gProjectImported = 1;
+}
+
+sub doSetup() {
+
+    if(! $::gProjectImported) {
+        importProject();
+    }
+}
+ 
+ntest "ExecuteSQLFromFile", {}, sub {
+    doSetup();
+    # run test job
+    
+    my $xpath = $::N->runProcedure($::gtestProjectName, 
+                 { procedureName => "ExecuteSQLFromFile",
+                 pollInterval  => '1',
+                 timeout => 600,
+                      actualParameter => [
+                     
+                     ]
+        });
+          
+       
+    # make sure it finished
+    my $jobId = 0;
+    my $status = "";
+    
+    assertOK($xpath, "runProcedure with errors");
+    if ($xpath) {
+        $jobId  = $xpath->findvalue("//jobId");
+        $status = $xpath->findvalue("//status");
+        $outcome = $xpath->findvalue("//outcome");
+        assertTrue($jobId && $jobId ne "",'valid job id');
+        assertEq('completed',$status,"job $jobId complete");
+        
+        #abort if job did not finish
+        if ($status ne "completed") {
+            assertOK($::N->abortJob($jobId, {force => 1}));
+        }
+    }
+ 
+    # get the job details
+    $xpath = $::N->getJobDetails($jobId);
+    
+    my $ConfigName          = $xpath->findvalue("//property[propertyName='ConfigName']/value");
+    my $PsqlPath            = $xpath->findvalue("//property[propertyName='PsqlPath']/value");
+    my $Server              = $xpath->findvalue("//property[propertyName='Server']/value");
+    my $OutputFileName      = $xpath->findvalue("//property[propertyName='OutputFileName']/value");
+    my $SQLFilePath         = $xpath->findvalue("//property[propertyName='SQLFilePath']/value");
+    my $AdditionalCommands  = $xpath->findvalue("//property[propertyName='AdditionalCommands']/value");
+    my $WorkingDir          = $xpath->findvalue("//property[propertyName='WorkingDir']/value");
+    my $commandLine         = $xpath->findvalue("//property[propertyName='commandLine']/value");
+    
+    # make sure the $cmd and $dir are what was expected
+    assertEq('PostgreSQL', $ConfigName, "Correct config name");
+    assertEq('psql', $PsqlPath, "correct path to psql");
+    assertEq('localhost', $Server, "correct Server name");
+    assertEq('', $OutputFileName, "correct doutput file");
+    assertEq('C:\\sqltest.sql', $SQLFilePath, "correct script file");
+    assertEq('', $AdditionalCommands, "correct output format");
+    assertEq('', $WorkingDir, "correct working directory");
+    assertSubstring($delimiter.'[PostgreSQL]@localhost'.$delimiter, $commandLine, "correct command line");
+    assertNotSubstring('PostgreSQLPassword', $commandLine, "plaintext password");
+};
+
+ntest "ExecuteSQLFromTextArea", {}, sub {
+    doSetup();
+    # run test job
+    
+    my $xpath = $::N->runProcedure($::gtestProjectName, 
+                 { procedureName => "ExecuteSQLFromTextArea",
+                 pollInterval  => '1',
+                 timeout => 600,
+                      actualParameter => [
+                     
+                     ]
+        });
+          
+       
+    # make sure it finished
+    my $jobId = 0;
+    my $status = "";
+    
+    assertOK($xpath, "runProcedure with errors");
+    if ($xpath) {
+        $jobId  = $xpath->findvalue("//jobId");
+        $status = $xpath->findvalue("//status");
+        $outcome = $xpath->findvalue("//outcome");
+        assertTrue($jobId && $jobId ne "",'valid job id');
+        assertEq('completed',$status,"job $jobId complete");
+        
+        #abort if job did not finish
+        if ($status ne "completed") {
+            assertOK($::N->abortJob($jobId, {force => 1}));
+        }
+    }
+ 
+    # get the job details
+    $xpath = $::N->getJobDetails($jobId);
+    
+    my $ConfigName          = $xpath->findvalue("//property[propertyName='ConfigName']/value");
+    my $PsqlPath         = $xpath->findvalue("//property[propertyName='PsqlPath']/value");
+    my $Server              = $xpath->findvalue("//property[propertyName='Server']/value");
+    my $OutputFileName      = $xpath->findvalue("//property[propertyName='OutputFileName']/value");
+    my $Query         = $xpath->findvalue("//property[propertyName='Query']/value");
+    my $AdditionalCommands  = $xpath->findvalue("//property[propertyName='AdditionalCommands']/value");
+    my $WorkingDir          = $xpath->findvalue("//property[propertyName='WorkingDir']/value");
+    my $commandLine         = $xpath->findvalue("//property[propertyName='commandLine']/value");
+    
+    # make sure the $cmd and $dir are what was expected
+    assertEq('PostgreSQL', $ConfigName, "Correct config name");
+    assertEq('psql', $PsqlPath, "correct path to psql");
+    assertEq('localhost', $Server, "correct Server name");
+    assertEq('', $OutputFileName, "correct doutput file");
+    assertEq('select * from person;', $Query, "correct query");
+    assertEq('', $AdditionalCommands, "correct output format");
+    assertEq('', $WorkingDir, "correct working directory");
+    assertSubstring($delimiter.'[PostgreSQL]@localhost'.$delimiter, $commandLine, "correct command line");
+    assertNotSubstring('PostgreSQLPassword', $commandLine, "plaintext password");
+};
+
+ntest "ExecuteSQLWithAdditionalCommands", {}, sub {
+    doSetup();
+    # run test job
+    
+    my $xpath = $::N->runProcedure($::gtestProjectName, 
+                 { procedureName => "ExecuteSQLWithAdditionalCommands",
+                 pollInterval  => '1',
+                 timeout => 600,
+                      actualParameter => [
+                     
+                     ]
+        });
+          
+       
+    # make sure it finished
+    my $jobId = 0;
+    my $status = "";
+    
+    assertOK($xpath, "runProcedure with errors");
+    if ($xpath) {
+        $jobId  = $xpath->findvalue("//jobId");
+        $status = $xpath->findvalue("//status");
+        $outcome = $xpath->findvalue("//outcome");
+        assertTrue($jobId && $jobId ne "",'valid job id');
+        assertEq('completed',$status,"job $jobId complete");
+        
+        #abort if job did not finish
+        if ($status ne "completed") {
+            assertOK($::N->abortJob($jobId, {force => 1}));
+        }
+    }
+ 
+    # get the job details
+    $xpath = $::N->getJobDetails($jobId);
+    
+    my $ConfigName          = $xpath->findvalue("//property[propertyName='ConfigName']/value");
+    my $PsqlPath         = $xpath->findvalue("//property[propertyName='PsqlPath']/value");
+    my $Server              = $xpath->findvalue("//property[propertyName='Server']/value");
+    my $OutputFileName      = $xpath->findvalue("//property[propertyName='OutputFileName']/value");
+    my $SQLFilePath         = $xpath->findvalue("//property[propertyName='SQLFilePath']/value");
+    my $AdditionalCommands  = $xpath->findvalue("//property[propertyName='AdditionalCommands']/value");
+    my $WorkingDir          = $xpath->findvalue("//property[propertyName='WorkingDir']/value");
+    my $commandLine         = $xpath->findvalue("//property[propertyName='commandLine']/value");
+        
+    # make sure the $cmd and $dir are what was expected
+    assertEq('PostgreSQL', $ConfigName, "Correct config name");
+    assertEq('psql', $PsqlPath, "correct path to psql");
+    assertEq('localhost', $Server, "correct Server name");
+    assertEq('', $OutputFileName, "correct doutput file");
+    assertEq('C:\\sqltest.sql', $SQLFilePath, "correct script file");
+    assertEq('-S', $AdditionalCommands, "correct output format");
+    assertEq('', $WorkingDir, "correct working directory");
+    assertSubstring($delimiter.'[PostgreSQL]@localhost'.$delimiter, $commandLine, "correct command line");
+    assertNotSubstring('PostgreSQLPassword', $commandLine, "plaintext password");
+};
+
+ntest "ExecuteSQLWithLogFile", {}, sub {
+    doSetup();
+    # run test job
+    
+    my $xpath = $::N->runProcedure($::gtestProjectName, 
+                 { procedureName => "ExecuteSQLWithLogFile",
+                 pollInterval  => '1',
+                 timeout => 600,
+                      actualParameter => [
+                     
+                     ]
+        });
+          
+       
+    # make sure it finished
+    my $jobId = 0;
+    my $status = "";
+    
+    assertOK($xpath, "runProcedure with errors");
+    if ($xpath) {
+        $jobId  = $xpath->findvalue("//jobId");
+        $status = $xpath->findvalue("//status");
+        $outcome = $xpath->findvalue("//outcome");
+        assertTrue($jobId && $jobId ne "",'valid job id');
+        assertEq('completed',$status,"job $jobId complete");
+        
+        #abort if job did not finish
+        if ($status ne "completed") {
+            assertOK($::N->abortJob($jobId, {force => 1}));
+        }
+    }
+ 
+    # get the job details
+    $xpath = $::N->getJobDetails($jobId);
+    
+    my $ConfigName          = $xpath->findvalue("//property[propertyName='ConfigName']/value");
+    my $PsqlPath            = $xpath->findvalue("//property[propertyName='PsqlPath']/value");
+    my $Server              = $xpath->findvalue("//property[propertyName='Server']/value");
+    my $OutputFileName      = $xpath->findvalue("//property[propertyName='OutputFileName']/value");
+    my $SQLFilePath         = $xpath->findvalue("//property[propertyName='SQLFilePath']/value");
+    my $AdditionalCommands  = $xpath->findvalue("//property[propertyName='AdditionalCommands']/value");
+    my $WorkingDir          = $xpath->findvalue("//property[propertyName='WorkingDir']/value");
+    my $commandLine         = $xpath->findvalue("//property[propertyName='commandLine']/value");
+    
+    # make sure the $cmd and $dir are what was expected
+    assertEq('PostgreSQL', $ConfigName, "Correct config name");
+    assertEq('psql', $PsqlPath, "correct path to psql");
+    assertEq('localhost', $Server, "correct Server name");
+    assertEq('report', $OutputFileName, "correct doutput file");
+    assertEq('C:\\sqltest.sql', $SQLFilePath, "correct script file");
+    assertEq('', $AdditionalCommands, "correct output format");
+    assertEq('', $WorkingDir, "correct working directory");
+    assertSubstring($delimiter.'[PostgreSQL]@localhost'.$delimiter, $commandLine, "correct command line");
+    assertNotSubstring('PostgreSQLPassword', $commandLine, "plaintext password");
+};

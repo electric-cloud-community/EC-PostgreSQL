@@ -1,0 +1,32 @@
+<project name="EC-PostgreSQL" default="package" basedir=".">
+	<description>
+        Build the EC-PostgreSQL plugin
+    </description>
+
+    <property name="buildconfigdir" value="../Plugin-In-A-Box/scripts" />
+    
+	<!-- plugin specific properties -->
+	<property name="pluginKey" value="EC-PostgreSQL" />
+	<property name="pluginVersion" value="1.0" />
+	<property name="gwtModules" value="ecplugins.PostgreSQL.ConfigurationManagement" />
+    <property name="package.export.src" value="PostgreSQL.srcs"/>
+
+    <import file="${buildconfigdir}/buildTargets.xml"/>
+
+    <!-- Package sources for exported utility classes. -->
+    <fileset id="PostgreSQL.srcs" dir="${dir.src}">
+      <include name="**/PluginConstants.java"/>
+      <include name="**/PostgreSQLConfigList.java"/>
+      <include name="**/PostgreSQLConfigListLoader.*"/>
+    </fileset>
+	
+	
+	<fileset id="images" dir="${dir.htdocs}">
+      <include name="**/PluginConstants.java"/>
+      <include name="**/PostgreSQLConfigList.java"/>
+      <include name="**/PostgreSQLConfigListLoader.*"/>
+    </fileset>
+	
+	
+	
+</project>

@@ -1,0 +1,68 @@
+<editor>
+    <help>/commander/pages/@PLUGIN_NAME@/@PLUGIN_KEY@_help?s=Administration&amp;ss=Plugins#ExecuteSQL</help>
+    <formElement>
+        <type>entry</type>
+        <label>Configuration name:</label>
+        <property>ConfigName</property>
+        <required>1</required>
+        <documentation>The name of the configuration that contains the user and password to connect to the database server.</documentation>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Query:</label>
+        <property>Query</property>
+        <required>0</required>
+        <documentation>Provide any query you want to run against the database.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Psql path:</label>
+        <property>PsqlPath</property>
+        <value>psql</value>
+        <required>1</required>
+        <documentation>Absolute path to the psql utility.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Server:</label>
+        <property>Server</property>
+        <documentation>The name/ip of the server you want to connect to.</documentation>
+        <required>1</required>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Output file:</label>
+        <property>OutputFileName</property>
+        <documentation>Name of a file to store output (without extension)</documentation>
+        <required>0</required>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>SQL file path:</label>
+        <property>SQLFilePath</property>
+        <documentation>Absolute path to a sql file.</documentation>
+        <required>0</required>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Additional commands:</label>
+        <property>AdditionalCommands</property>
+        <required>0</required>
+        <documentation>Additional commands to be entered.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Working directory:</label>
+        <property>WorkingDir</property>
+        <required>0</required>
+        <documentation>Sets the directory where the command will be executed</documentation>
+    </formElement>
+    <formElement>
+        <label>Result (output property path):</label>
+        <property>Result_outpp</property>
+        <value></value>
+        <documentation>Property name used to store the result of queries.</documentation>
+        <required>0</required>
+        <type>entry</type>
+    </formElement>
+</editor>

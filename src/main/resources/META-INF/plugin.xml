@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <key>@PLUGIN_KEY@</key>
+    <version>@PLUGIN_VERSION@</version>
+    <label>@PLUGIN_KEY@</label>
+    <description>PostgreSQL plugin</description>
+    <configure>configurations.xml</configure>
+    <help>EC-PostgreSQL_help.xml</help>
+    <author>Shaohua Wen</author>
+    <authorUrl>mailto:swen@cloudbees.com</authorUrl>
+    <category>Database</category>
+    <commander-version min="4.2"/>
+    <components>
+        <component name="ConfigurationManagement">
+            <javascript>war/ecplugins.PostgreSQL.ConfigurationManagement/ecplugins.PostgreSQL.ConfigurationManagement.nocache.js</javascript>
+        </component>
+    </components>
+    <customTypes>
+        <customType name="RunCommandLine">
+            <parameterPanel>
+                <javascript>war/ecplugins.PostgreSQL.RunCommandLineParameterPanel/ecplugins.PostgreSQL.RunCommandLineParameterPanel.nocache.js</javascript>
+            </parameterPanel>
+        </customType>
+    </customTypes>
+</plugin>

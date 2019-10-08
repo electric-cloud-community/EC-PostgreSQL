@@ -1,0 +1,47 @@
+<?xml version='1.0' standalone='yes'?>
+<fileset>
+  <file>
+    <path>forms/PostgreSQLCreateConfigForm.xml</path>
+    <xpath>//property[propertyName=&quot;ui_forms&quot;]/propertySheet/property[propertyName=&quot;@PLUGIN_KEY@ - PostgreSQLCreateConfigForm&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>forms/PostgreSQLEditConfigForm.xml</path>
+    <xpath>//property[propertyName=&quot;ui_forms&quot;]/propertySheet/property[propertyName=&quot;@PLUGIN_KEY@ - PostgreSQLEditConfigForm&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>forms/ExecuteSQL.xml</path>
+    <xpath>//procedure[procedureName=&quot;ExecuteSQL&quot;]/propertySheet/property[propertyName=&quot;ec_parameterForm&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>CreateCommandLine.pl</path>
+    <xpath>//step[stepName=&quot;createCommandLine&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>RunCommandLine.pl</path>
+    <xpath>//step[stepName=&quot;runCommandLine&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>postp_matchers.pl</path>
+    <xpath>//property[propertyName=&quot;postp_matchers&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>ec_setup.pl</path>
+    <xpath>//property[propertyName=&quot;ec_setup&quot;]/value</xpath>
+  </file>
+  <file>
+    <path>conf/createcfg.pl</path>
+    <xpath>//procedure[procedureName=&quot;CreateConfiguration&quot;]/step[stepName=&quot;CreateConfiguration&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>conf/createAndAttachCredential.pl</path>
+    <xpath>//procedure[procedureName=&quot;CreateConfiguration&quot;]/step[stepName=&quot;CreateAndAttachCredential&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>conf/deletecfg.pl</path>
+    <xpath>//procedure[procedureName=&quot;DeleteConfiguration&quot;]/step[stepName=&quot;DeleteConfiguration&quot;]/command</xpath>
+  </file>
+  <file>
+    <path>conf/Common.pm</path>
+    <xpath>//property[propertyName=&quot;libs&quot;]/propertySheet/property[propertyName=&quot;Common.pm&quot;]/value</xpath>
+  </file>
+</fileset>
