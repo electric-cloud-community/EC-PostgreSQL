@@ -186,10 +186,8 @@
                 <tr>
                     <td>Additional commands</td>
 
-                    <td>Additional commands, such as -S to activate the SQL*Plus silent mode.<br />
-                     For more commands, go to 
-                    <a href="https://www.postgresql.org/docs/">
-                    this website.</a></td>
+                    <td>Additional commands, such as -d to connect to specified database.<br />
+                     For more commands, go to <a href="https://www.postgresql.org/docs/">this website.</a></td>
                 </tr>
 
                 <tr>
